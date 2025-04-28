@@ -1,4 +1,6 @@
 defmodule GroupchatWeb.AuthOverrides do
+  @moduledoc false
+
   use AshAuthentication.Phoenix.Overrides
 
   # configure your UI overrides here

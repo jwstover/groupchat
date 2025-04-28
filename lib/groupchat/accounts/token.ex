@@ -1,4 +1,6 @@
 defmodule Groupchat.Accounts.Token do
+  @moduledoc false
+
   use Ash.Resource,
     otp_app: :groupchat,
     domain: Groupchat.Accounts,

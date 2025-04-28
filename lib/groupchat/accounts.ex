@@ -1,4 +1,6 @@
 defmodule Groupchat.Accounts do
+  @moduledoc false
+
   use Ash.Domain, otp_app: :groupchat, extensions: [AshAdmin.Domain]
 
   admin do
