@@ -99,25 +99,23 @@ jobs:
   build_and_test:
     name: Build and test
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:12.2-alpine
-        env:
-          DB_HOSTNAME: "postgres"
-          POSTGRES_PASSWORD: "postgres"
-          POSTGRES_HOST_AUTH_METHOD: trust
-          options: >-
-            --health-cmd pg_isready
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
     env:
       MIX_ENV: test
-      DB_HOSTNAME: "postgres"
     strategy:
       matrix:
         elixir: ["1.16"]
         otp: ["26"]
+    services:
+      postgres:
+        image: postgres:12.2-alpine
+        ports: ['5432:5432']
+        env:
+          POSTGRES_PASSWORD: "postgres"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout repository
