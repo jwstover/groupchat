@@ -7,7 +7,7 @@
 @plugin "./heroicons.tailwind.plugin.js";
 
 @plugin "daisyui" {
-  themes: caramellatte --default, sunset --prefersdark;
+  themes: light --default, dark --prefersdark;
 }
 
 @import "tailwindcss"
