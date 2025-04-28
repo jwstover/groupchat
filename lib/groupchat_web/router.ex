@@ -41,7 +41,7 @@ defmodule GroupchatWeb.Router do
   scope "/", GroupchatWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", ChatLive.Index, :home
     auth_routes AuthController, Groupchat.Accounts.User, path: "/auth"
     sign_out_route AuthController
 
