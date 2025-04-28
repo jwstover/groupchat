@@ -20,6 +20,11 @@ if System.get_env("PHX_SERVER") do
   config :groupchat, GroupchatWeb.Endpoint, server: true
 end
 
+config :groupghat, Groupchat.Repo,
+  hostname: System.get_env("DB_HOSTNAME", "localhost"),
+  username: System.get_env("DB_USERNAME", "postgres"),
+  password: System.get_env("DB_PASSWORD", "postgres")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
