@@ -1,4 +1,6 @@
 defmodule Groupchat.Repo do
+  @moduledoc false
+
   use AshPostgres.Repo,
     otp_app: :groupchat
 

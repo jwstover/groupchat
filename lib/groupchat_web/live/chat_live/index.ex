@@ -4,7 +4,6 @@ defmodule GroupchatWeb.ChatLive.Index do
   use GroupchatWeb, :live_view
 
   def mount(_params, _session, socket) do
-    
     {:ok, socket}
   end
 

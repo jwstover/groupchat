@@ -10,7 +10,21 @@ defmodule Groupchat.MixProject do
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        check: :test,
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.html": :test
+      ],
+      dialyzer: [
+        ignore_warnings: ".dialyzer_ignore.exs",
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+        flags: [:error_handling, :unknown],
+        # Error out when an ignore rule is no longer useful so we can remove it
+        list_unused_filters: true
+      ]
     ]
   end
 
@@ -68,7 +82,11 @@ defmodule Groupchat.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.18", only: [:test], runtime: false},
+      {:sobelow, "~> 0.11", only: :dev}
     ]
   end
 
@@ -91,7 +109,16 @@ defmodule Groupchat.MixProject do
         "esbuild groupchat --minify",
         "phx.digest"
       ],
-      "phx.routes": ["phx.routes", "ash_authentication.phoenix.routes"]
+      "phx.routes": ["phx.routes", "ash_authentication.phoenix.routes"],
+      check: [
+        "clean",
+        "deps.unlock --check-unused",
+        "compile --warnings-as-errors",
+        "format --check-formatted",
+        "deps.unlock --check-unused",
+        "test --warnings-as-errors",
+        "credo"
+      ]
     ]
   end
 end
