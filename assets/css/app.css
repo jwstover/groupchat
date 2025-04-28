@@ -1,4 +1,3 @@
-
 @source "../../lib/groupchat_web/**/*.*ex";
 
 @custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
@@ -6,6 +5,10 @@
 @custom-variant phx-change-loading (.phx-change-loading&, .phx-change-loading &);
 
 @plugin "./heroicons.tailwind.plugin.js";
-@import "tailwindcss"
 
+@plugin "daisyui" {
+  themes: caramellatte --default, sunset --prefersdark;
+}
+
+@import "tailwindcss"
 /* This file is for your main application CSS */
