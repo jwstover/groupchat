@@ -5,4 +5,5 @@
 #
 # More info in the Dialyxir README:
 # https://github.com/jeremyjh/dialyxir#elixir-term-format
-[]
+[{"lib/groupchat/repo.ex", "Function all_tenants/0 only terminates with explicit exception."}]
+

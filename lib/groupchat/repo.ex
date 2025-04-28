@@ -1,6 +1,5 @@
 defmodule Groupchat.Repo do
   @moduledoc false
-  @dialyzer {:nowarn_function, all_tenants: 0}
 
   use AshPostgres.Repo,
     otp_app: :groupchat
