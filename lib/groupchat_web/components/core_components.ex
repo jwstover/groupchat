@@ -112,23 +112,31 @@ defmodule GroupchatWeb.CoreComponents do
     <div
       :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
       id={@id}
+      phx-mounted={
+        JS.hide(
+          transition: {"ease-out duration-300 delay-3000", "opacity-100", "opacity-0"},
+          time: 3_300
+        )
+      }
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
-        @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
-        @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+        "alert alert-vertical sm:alert-horizontal bg-base-300 shadow-lg max-w-max border",
+        @kind == :info && "border-success",
+        @kind == :error && "border-error"
       ]}
       {@rest}
     >
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
-        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
-        {@title}
+        <.icon :if={@kind == :info} name="hero-information-circle" class="h-6 w-6 text-success" />
+        <.icon :if={@kind == :error} name="hero-exclamation-circle" class="h-6 w-6 text-error" />
       </p>
-      <p class="mt-2 text-sm leading-5">{msg}</p>
-      <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
-        <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
+      <div>
+        <h3 class="font-bold">{@title}</h3>
+        <div class="text-xs">{msg}</div>
+      </div>
+      <button type="button" class="btn btn-sm btn-ghost" aria-label={gettext("close")}>
+        {gettext("close")}
       </button>
     </div>
     """
@@ -146,7 +154,7 @@ defmodule GroupchatWeb.CoreComponents do
 
   def flash_group(assigns) do
     ~H"""
-    <div id={@id}>
+    <div id={@id} class="flex flex-col gap-2">
       <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
       <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
       <.flash
@@ -228,15 +236,7 @@ defmodule GroupchatWeb.CoreComponents do
 
   def button(assigns) do
     ~H"""
-    <button
-      type={@type}
-      class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
-        @class
-      ]}
-      {@rest}
-    >
+    <button type={@type} class={["btn", @class]} {@rest}>
       {render_slot(@inner_block)}
     </button>
     """
@@ -351,7 +351,7 @@ defmodule GroupchatWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div>
-      <.label for={@id}>{@label}</.label>
+      <.label :if={@label} for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
@@ -371,16 +371,16 @@ defmodule GroupchatWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div>
-      <.label for={@id}>{@label}</.label>
+      <.label :if={@label} for={@id}>{@label}</.label>
       <input
         type={@type}
         name={@name}
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "input input-bordered",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "input",
+          @class,
+          @errors != [] && "input-error"
         ]}
         {@rest}
       />
@@ -397,8 +397,10 @@ defmodule GroupchatWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
-      {render_slot(@inner_block)}
+    <label for={@for} class="label">
+      <span class="label-text text-base-content font-semibold text-sm mb-2">
+        {render_slot(@inner_block)}
+      </span>
     </label>
     """
   end

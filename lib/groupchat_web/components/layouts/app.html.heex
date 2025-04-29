@@ -23,7 +23,9 @@
     </div>
   </header>
   <main class="relative flex-grow p-8 overflow-auto bg-base-200">
-    <.flash_group flash={@flash} />
+    <div class="absolute top-2 right-2">
+      <.flash_group flash={@flash} />
+    </div>
     {@inner_content}
   </main>
 </div>
