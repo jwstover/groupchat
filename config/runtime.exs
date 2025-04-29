@@ -25,6 +25,10 @@ config :groupchat, Groupchat.Repo,
   username: System.get_env("DB_USERNAME", "postgres"),
   password: System.get_env("DB_PASSWORD", "postgres")
 
+config :langchain,
+       :openai_key,
+       System.get_env("OPENAI_API_KEY") || raise("OPENAI_API_KEY is required")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

@@ -10,5 +10,10 @@
   themes: light --default, dark --prefersdark;
 }
 
+:root {
+  font-size: 14px;
+}
+
 @import "tailwindcss"
+
 /* This file is for your main application CSS */

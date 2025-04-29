@@ -8,6 +8,9 @@ on:
     branches:
       - '*'
 
+env:
+  OPENAI_API_KEY: ${{ vars.OPENAI_API_KEY }}
+
 permissions:
   contents: write
   packages: write
