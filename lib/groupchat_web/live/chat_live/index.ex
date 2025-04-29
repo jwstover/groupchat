@@ -25,12 +25,14 @@ defmodule GroupchatWeb.ChatLive.Index do
       <div class="border border-base-content/20 shadow bg-base-100 rounded-box p-2">
         <.simple_form for={@form} phx-change="validate" phx-submit="send">
           <.input
+            id="chat-input"
             type="textarea"
             class="min-h-min"
-            rows="1"
             phx-debounce={300}
             field={@form[:message]}
             placeholder="Send a message"
+            phx-hook="ChatInput"
+            phx-update="ignore"
           />
 
           <div class="flex items-center justify-end">
