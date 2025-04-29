@@ -24,7 +24,7 @@ defmodule GroupchatWeb.ChatLive.Index do
       %{
         id: 2,
         text: """
-        This is a longer multiline message.
+        This is a longer multiline message. it also has a really long line so that we can check that word wrapping is working properly.
 
         Testing one two three four.
         """,
@@ -67,7 +67,7 @@ defmodule GroupchatWeb.ChatLive.Index do
     <div class="h-full flex flex-col gap-4">
       <div
         id="messages-window"
-        class="flex-grow p-2 border border-base-content/20 shadow bg-base-100 rounded-box"
+        class="flex-grow space-y-2 p-2 border border-base-content/20 shadow bg-base-100 rounded-box"
         phx-update="stream"
       >
         <div
@@ -84,10 +84,10 @@ defmodule GroupchatWeb.ChatLive.Index do
               />
             </div>
           </div>
-          <div class="chat-header">
+          <div class="chat-header mb-1">
             {message.from} <time class="text-xs opacity-50">12:46</time>
           </div>
-          <div class="chat-bubble max-w-1/2">
+          <div class={["chat-bubble max-w-[70%]", "chat-bubble-info"]}>
             <p class="whitespace-pre-wrap">{message.text}</p>
           </div>
         </div>
