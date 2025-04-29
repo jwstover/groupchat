@@ -2,9 +2,16 @@ let ChatInput = {
   mounted() {
     const form = this.el.closest("form");
 
-    form && form.addEventListener("submit", () => {
-      // Clear the textarea after submission
-      this.el.value = "";
+    form && form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const message = this.el.value; // Capture the message
+      if (message.trim() !== "") {
+        this.pushEvent("send", { message: message }); // Send the message to the server
+        form.reset(); // Clear the form after sending
+        console.log("Message sent and form cleared");
+      }
     })
 
     this.el.addEventListener("input", () => {
