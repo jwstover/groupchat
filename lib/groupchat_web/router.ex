@@ -35,13 +35,13 @@ defmodule GroupchatWeb.Router do
       #
       # If an authenticated user must *not* be present:
       # on_mount {GroupchatWeb.LiveUserAuth, :live_no_user}
+      live "/", ChatLive.Index, :home
     end
   end
 
   scope "/", GroupchatWeb do
     pipe_through :browser
 
-    live "/", ChatLive.Index, :home
     auth_routes AuthController, Groupchat.Accounts.User, path: "/auth"
     sign_out_route AuthController
 
@@ -50,10 +50,7 @@ defmodule GroupchatWeb.Router do
                   reset_path: "/reset",
                   auth_routes_prefix: "/auth",
                   on_mount: [{GroupchatWeb.LiveUserAuth, :live_no_user}],
-                  overrides: [
-                    GroupchatWeb.AuthOverrides,
-                    AshAuthentication.Phoenix.Overrides.Default
-                  ]
+                  live_view: GroupchatWeb.AuthLive.SignIn
 
     # Remove this if you do not want to use the reset password feature
     reset_route auth_routes_prefix: "/auth",

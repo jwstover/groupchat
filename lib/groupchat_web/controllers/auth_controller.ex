@@ -35,6 +35,16 @@ defmodule GroupchatWeb.AuthController do
           You can confirm your account using the link we sent to you, or by resetting your password.
           """
 
+        {_,
+         %AshAuthentication.Errors.AuthenticationFailed{
+           caused_by: %Ash.Error.Forbidden{
+             errors: [%AshAuthentication.Errors.InvalidToken{}]
+           }
+         }} ->
+          """
+          That token is no longer valid.
+          """
+
         _ ->
           "Incorrect email or password"
       end
