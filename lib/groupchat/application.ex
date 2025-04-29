@@ -18,7 +18,9 @@ defmodule Groupchat.Application do
       # {Groupchat.Worker, arg},
       # Start to serve requests, typically the last entry
       GroupchatWeb.Endpoint,
-      {AshAuthentication.Supervisor, [otp_app: :groupchat]}
+      {AshAuthentication.Supervisor, [otp_app: :groupchat]},
+      {Registry, keys: :unique, name: Groupchat.ChatRegistry},
+      {Groupchat.ChatSupervisor, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -2,23 +2,22 @@ defmodule Groupchat.Chat do
   @moduledoc false
 
   alias Groupchat.Chat.ChatServer
+  alias Groupchat.ChatSupervisor
 
-  def new do
-    ChatServer.start_link()
+  def get(thread_id) do
+    ChatSupervisor.get_chat_server_pid(thread_id)
+    |> case do
+      {:ok, pid} -> {:ok, pid}
+      _ -> ChatSupervisor.start_child(thread_id)
+    end
   end
 
-  def send_message(message, from, chat_id, chat_pid) do
-    Phoenix.PubSub.broadcast(Groupchat.PubSub, "chat##{chat_id}", {:message, from, message})
+  def send_message(message, sender_id, thread_id, assistant_id) do
+    {:ok, pid} = get(thread_id)
 
-    Task.start(fn ->
-      response = ChatServer.add_message(chat_pid, from, message)
+    ChatServer.add_message_and_run(pid, message, sender_id, thread_id, assistant_id)
 
-      Phoenix.PubSub.broadcast(
-        Groupchat.PubSub,
-        "chat##{chat_id}",
-        {:message, "ChatGPT", response}
-      )
-    end)
+    :ok
   end
 
   def subscribe_to_chat(chat_id) do

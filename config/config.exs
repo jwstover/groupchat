@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :groupchat, :env, config_env()
+
 config :ash,
   allow_forbidden_field_for_relationships_by_default?: true,
   include_embedded_source_by_default?: false,
@@ -51,7 +53,7 @@ config :spark,
 config :groupchat,
   ecto_repos: [Groupchat.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [Groupchat.Accounts]
+  ash_domains: [Groupchat.OpenAI, Groupchat.Accounts]
 
 # Configures the endpoint
 config :groupchat, GroupchatWeb.Endpoint,

@@ -3,9 +3,10 @@ defmodule Groupchat.Chat.ChatServer do
 
   use GenServer
 
-  alias LangChain.Chains.LLMChain
-  alias LangChain.ChatModels.ChatOpenAI
-  alias LangChain.Message
+  require Logger
+
+  alias Groupchat.OpenAIApi.MessagesApi
+  alias Groupchat.OpenAIApi.RunsApi
 
   # ╭──────────────────────────────────────────────────────────────────────────────╮
   # │                                  CLIENT API                                  │
@@ -14,15 +15,19 @@ defmodule Groupchat.Chat.ChatServer do
   @doc """
   Starts the chat server.
   """
-  def start_link(initial_state \\ %{}) do
-    GenServer.start_link(__MODULE__, initial_state)
+  def start_link(thread_id: thread_id) do
+    GenServer.start_link(__MODULE__, %{thread_id: thread_id}, name: via_tuple(thread_id))
+  end
+
+  defp via_tuple(thread_id) do
+    {:via, Registry, {Groupchat.ChatRegistry, thread_id}}
   end
 
   @doc """
   Gets the current state of the chat server.
   """
-  def add_message(pid, sender, message, timeout \\ 60_000) do
-    GenServer.call(pid, {:add_message, sender, message}, timeout)
+  def add_message_and_run(pid, message, sender_id, thread_id, assistant_id) do
+    GenServer.cast(pid, {:add_message_and_run, message, sender_id, thread_id, assistant_id})
   end
 
   # ╭──────────────────────────────────────────────────────────────────────────────╮
@@ -31,23 +36,35 @@ defmodule Groupchat.Chat.ChatServer do
 
   @impl true
   def init(state) do
-    {:ok, updated_chain} =
-      %{llm: ChatOpenAI.new!(%{model: "gpt-4o"})}
-      |> LLMChain.new()
-
-    state = Map.put(state, :llm_chain, updated_chain)
-
     {:ok, state}
   end
 
   @impl true
-  def handle_call({:add_message, _sender, message}, _from, state) do
-    llm_chain = state.llm_chain
+  def handle_cast({:add_message_and_run, message, sender_id, thread_id, assistant_id}, state) do
+    {:ok, message} =
+      MessagesApi.create(thread_id, %{
+        content: message,
+        role: "user",
+        metadata: %{sender_id: sender_id}
+      })
 
-    {:ok, updated_chain} =
-      LLMChain.add_message(llm_chain, Message.new_user!(message))
-      |> LLMChain.run()
+    Phoenix.PubSub.broadcast(Groupchat.PubSub, "chat##{thread_id}", {:message, message})
 
-    {:reply, updated_chain.last_message.content, %{state | llm_chain: updated_chain}}
+    {:ok, run_stream} = RunsApi.stream(thread_id, assistant_id)
+
+    IO.puts(inspect(run_stream))
+    IO.puts(inspect(run_stream.task_pid))
+
+    run_stream.body_stream
+    |> Stream.flat_map(& &1)
+    |> Enum.each(fn event ->
+      Phoenix.PubSub.broadcast(
+        Groupchat.PubSub,
+        "chat##{thread_id}",
+        {:assistant_stream_event, event}
+      )
+    end)
+
+    {:noreply, state}
   end
 end

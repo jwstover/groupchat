@@ -41,6 +41,12 @@ defmodule Groupchat.Accounts.User do
   actions do
     defaults [:read]
 
+    read :get_by_id do
+      argument :id, :uuid_v7, allow_nil?: false
+
+      get? true
+    end
+
     read :get_by_subject do
       description "Get a user by the subject claim in a JWT"
       argument :subject, :string, allow_nil?: false
@@ -86,6 +92,11 @@ defmodule Groupchat.Accounts.User do
 
       run AshAuthentication.Strategy.MagicLink.Request
     end
+
+    update :set_default_assistant do
+      accept [:default_assistant_id]
+      require_attributes [:default_assistant_id]
+    end
   end
 
   policies do
@@ -94,6 +105,7 @@ defmodule Groupchat.Accounts.User do
     end
 
     policy always() do
+      authorize_if expr(id == ^actor(:id))
       forbid_if always()
     end
   end
@@ -105,6 +117,10 @@ defmodule Groupchat.Accounts.User do
       allow_nil? false
       public? true
     end
+  end
+
+  relationships do
+    belongs_to :default_assistant, Groupchat.OpenAI.Assistant
   end
 
   identities do
