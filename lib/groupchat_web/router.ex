@@ -36,6 +36,7 @@ defmodule GroupchatWeb.Router do
       # If an authenticated user must *not* be present:
       # on_mount {GroupchatWeb.LiveUserAuth, :live_no_user}
       live "/", ChatLive.Index, :home
+      live "/chat/:thread_id", ChatLive.Thread, :thread
     end
   end
 

@@ -87,7 +87,10 @@ defmodule Groupchat.MixProject do
       {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: [:test], runtime: false},
       {:sobelow, "~> 0.11", only: :dev},
-      {:langchain, "~> 0.3.0"}
+      {:langchain, "~> 0.3.0"},
+      {:tidewave, "~> 0.1", only: :dev},
+      {:req, "~> 0.5"},
+      {:openai_ex, "~> 0.9"}
     ]
   end
 
@@ -101,7 +104,7 @@ defmodule Groupchat.MixProject do
     [
       setup: ["deps.get", "ash.setup", "assets.setup", "assets.build", "run priv/repo/seeds.exs"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.reset": ["clean_openai_resources", "ecto.drop", "ecto.setup"],
       test: ["ash.setup --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind groupchat", "esbuild groupchat"],
