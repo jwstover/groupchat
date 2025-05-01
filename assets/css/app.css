@@ -1,4 +1,7 @@
+@import "tailwindcss";
 @source "../../lib/groupchat_web/**/*.*ex";
+
+@plugin "@tailwindcss/typography";
 
 @custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
 @custom-variant phx-submit-loading (.phx-submit-loading&, .phx-submit-loading &);
@@ -14,6 +17,5 @@
   font-size: 16px;
 }
 
-@import "tailwindcss"
 
 /* This file is for your main application CSS */
