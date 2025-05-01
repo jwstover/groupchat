@@ -9,6 +9,7 @@ defmodule Groupchat.Accounts do
 
   resources do
     resource Groupchat.Accounts.Token
+
     resource Groupchat.Accounts.User do
       define :request_magic_link, args: [:email]
     end

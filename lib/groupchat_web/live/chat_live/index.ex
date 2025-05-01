@@ -102,7 +102,10 @@ defmodule GroupchatWeb.ChatLive.Index do
           <div class="chat-header mb-1">
             {message.from} <time class="text-xs opacity-50">12:46</time>
           </div>
-          <div class={["chat-bubble max-w-[70%]", message.from == @current_user.id && "chat-bubble-info"]}>
+          <div class={[
+            "chat-bubble max-w-[70%]",
+            message.from == @current_user.id && "chat-bubble-info"
+          ]}>
             <p class="whitespace-pre-wrap">{message.text}</p>
           </div>
         </div>
