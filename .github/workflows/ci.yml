@@ -181,13 +181,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.github_token }}
 
-      - name: Approve Changelog PR
-        if: steps.changelog.outputs.skipped == 'false'
-        run: |
-          gh pr review --approve ${{ env.PR_BRANCH }}
-        env:
-          GH_TOKEN: ${{ secrets.github_token }}
-
       - name: Merge Changelog PR
         if: steps.changelog.outputs.skipped == 'false'
         run: |
