@@ -7,6 +7,8 @@ defmodule GroupchatWeb.ChatLive.Index do
 
   alias Groupchat.Chat
 
+  on_mount {GroupchatWeb.LiveUserAuth, :live_user_required}
+
   @chat_id "1234"
 
   def mount(_params, _session, socket) do
@@ -59,8 +61,9 @@ defmodule GroupchatWeb.ChatLive.Index do
 
     chat_id = socket.assigns.chat_id
     chat_pid = socket.assigns.chat_pid
+    current_user = socket.assigns.current_user
 
-    Chat.send_message(message, "Jake", chat_id, chat_pid)
+    Chat.send_message(message, current_user.id, chat_id, chat_pid)
 
     {:noreply, socket |> assign(form: to_form(%{"message" => ""}))}
   end
@@ -85,7 +88,7 @@ defmodule GroupchatWeb.ChatLive.Index do
         <div
           :for={{dom_id, message} <- @streams.messages}
           id={dom_id}
-          class={["chat hidden", (message.from == "Jake" && "chat-end") || "chat-start"]}
+          class={["chat hidden", (message.from == @current_user.id && "chat-end") || "chat-start"]}
           phx-mounted={JS.show(display: "grid")}
         >
           <div class="chat-image avatar">
@@ -99,7 +102,10 @@ defmodule GroupchatWeb.ChatLive.Index do
           <div class="chat-header mb-1">
             {message.from} <time class="text-xs opacity-50">12:46</time>
           </div>
-          <div class={["chat-bubble max-w-[70%]", message.from == "Jake" && "chat-bubble-info"]}>
+          <div class={[
+            "chat-bubble max-w-[70%]",
+            message.from == @current_user.id && "chat-bubble-info"
+          ]}>
             <p class="whitespace-pre-wrap">{message.text}</p>
           </div>
         </div>
