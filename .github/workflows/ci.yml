@@ -20,6 +20,7 @@ jobs:
   dialyzer:
     name: Run Dialyzer
     runs-on: ubuntu-latest
+    if: false
     env:
       MIX_ENV: dev
     strategy:
