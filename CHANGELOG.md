@@ -1,3 +1,12 @@
+# [0.4.0](https://github.com/jwstover/groupchat/compare/v0.3.0...v0.4.0) (2025-05-01)
+
+
+### Features
+
+* add magic link authentication ([#11](https://github.com/jwstover/groupchat/issues/11)) ([dde57ef](https://github.com/jwstover/groupchat/commit/dde57ef8e83b6190d486c39f339e71141f36acdb))
+
+
+
 # [0.3.0](https://github.com/jwstover/groupchat/compare/v0.2.0...v0.3.0) (2025-04-29)
 
 
