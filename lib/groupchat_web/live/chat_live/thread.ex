@@ -143,10 +143,10 @@ defmodule GroupchatWeb.ChatLive.Thread do
             {message["metadata"]["sender_id"]} <time class="text-xs opacity-50">12:46</time>
           </div>
           <div class={[
-            "chat-bubble max-w-[70%]",
+            "chat-bubble max-w-[70%] prose",
             message["metadata"]["sender_id"] == @current_user.id && "chat-bubble-info"
           ]}>
-            <p class="whitespace-pre-wrap">{message_content(message)}</p>
+            {Phoenix.HTML.raw(message_content(message))}
           </div>
         </div>
       </div>
@@ -162,5 +162,6 @@ defmodule GroupchatWeb.ChatLive.Thread do
       %{"type" => "text", "text" => %{"value" => value}}, content -> content <> value
       _, content -> content
     end)
+    |> Earmark.as_html!()
   end
 end

@@ -90,7 +90,8 @@ defmodule Groupchat.MixProject do
       {:langchain, "~> 0.3.0"},
       {:tidewave, "~> 0.1", only: :dev},
       {:req, "~> 0.5"},
-      {:openai_ex, "~> 0.9"}
+      {:openai_ex, "~> 0.9"},
+      {:earmark, "~> 1.4"}
     ]
   end
 
