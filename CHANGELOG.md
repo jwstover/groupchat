@@ -1,4 +1,4 @@
-# [0.6.0](https://github.com/jwstover/groupchat/compare/v0.3.0...v0.6.0) (2025-05-01)
+# [0.7.0](https://github.com/jwstover/groupchat/compare/v0.3.0...v0.7.0) (2025-05-06)
 
 
 ### Features
